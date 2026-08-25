@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Reportes - NovaShop</title>
+    <link rel="stylesheet" href="estilos.css">
+    <script src="app.js" defer></script>
+</head>
+<body>
+
+<header>
+    <h1>NovaShop</h1>
+    <h2>Reportes</h2>
+</header>
+
+<nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="inventario.html">Inventario</a>
+    <a href="operaciones.html">Operaciones</a>
+    <a href="Reportes.html">Reportes</a>
+</nav>
+
+<main>
+
+<section>
+
+<h2>Generar Reporte</h2>
+
+<label>Tipo de Reporte</label>
+
+<select id="tipoReporte">
+    <option>Inventario</option>
+    <option>Ventas</option>
+    <option>Gastos</option>
+</select>
+
+<label>Período</label>
+
+<input type="month" id="periodoReporte">
+
+<br><br>
+
+<button id="generarReporte">Generar Reporte</button>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Resumen General</h2>
+
+<p id="totalProductos">Total de productos registrados: 0</p>
+
+<p id="totalVentas">Total de ventas: $0</p>
+
+<p id="totalGastos">Total de gastos: $0</p>
+
+<p id="stockBajo">Productos con stock bajo: 0</p>
+
+</section>
+
+<hr>
+
+<section>
+
+<h2>Resultado del Reporte</h2>
+
+<div id="resultadoReporte"></div>
+
+</section>
+
+</main>
+
+<footer>
+    <p>NovaShop - Johan Ventresca - Bruno Silva - Mateo Mayero</p>
+</footer>
+
+</body>
+</html>
