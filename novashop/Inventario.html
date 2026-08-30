@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario - NovaShop</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+<header>
+    <h1>NovaShop</h1>
+    <h2>Gestión de Inventario</h2>
+</header>
+
+<nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="inventario.html">Inventario</a>
+    <a href="operaciones.html">Operaciones</a>
+    <a href="reportes.html">Reportes</a>
+</nav>
+
+<main>
+
+<section>
+
+<h2>Registro de Productos</h2>
+
+<form id="productoForm">
+
+<label>Nombre del producto</label>
+<input type="text" id="nombre">
+
+<label>Categoría</label>
+<input type="text" id="categoria">
+
+<label>Precio costo</label>
+<input type="number" id="precioCosto">
+
+<label>Precio venta</label>
+<input type="number" id="precioVenta">
+
+<label>Unidad de medida</label>
+<input type="text" id="unidad">
+
+<label>Stock actual</label>
+<input type="number" id="stockActual">
+
+<label>Stock mínimo</label>
+<input type="number" id="stockMinimo">
+
+<button type="submit">Guardar Producto</button>
+
+</form>
+
+</section>
+
+<section>
+
+<h2>Productos Registrados</h2>
+
+<table>
+
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Categoría</th>
+<th>Stock</th>
+<th>Precio Venta</th>
+</tr>
+</thead>
+
+<tbody id="tablaProductos">
+
+</tbody>
+
+</table>
+
+</section>
+
+<section>
+
+<h2>Alertas de Stock</h2>
+
+<p>Revisar productos con stock cercano al mínimo.</p>
+
+</section>
+
+</main>
+
+<footer>
+<p>NovaShop - Johan Ventresca - Bruno Silva - Mateo Mayero</p>
+</footer>
+
+<script src="app.js"></script>
+
+</body>
+</html>
