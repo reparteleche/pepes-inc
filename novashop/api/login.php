@@ -39,7 +39,7 @@ if ($authenticatedUser) {
     ]);
 } else {
     http_response_code(401);
-    echo json_encode(["error" => "Incorrect email, password, or role."]);
+    echo json_encode(["error" => "email incorrecto, contraseña, o rol."]);
 }
 exit;
 ?>

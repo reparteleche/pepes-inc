@@ -1,0 +1,98 @@
+<?php require_once "config/auth_check.php"; checkAccess("Vendedor"); ?>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Operaciones - NovaShop</title>
+    <link rel="stylesheet" href="estilos.css?v=3.0">
+</head>
+<body>
+
+<header>
+    <h1>NovaShop</h1>
+    <h2>Módulo de Operaciones Diarias</h2>
+</header>
+
+<nav>
+    <a href="dashboard.php">Dashboard</a>
+    <a href="inventario.php">Inventario</a>
+    <a href="operaciones.php">Operaciones</a>
+    <a href="reportes.php">Reportes</a>
+</nav>
+
+<main>
+
+    <section>
+        <h2>Nueva Venta</h2>
+        <form id="ventaForm">
+            <label>Producto</label>
+            <select id="productoVenta">
+            </select>
+
+            <label>Cantidad</label>
+            <input type="number" id="cantidad" min="1" required>
+
+            <label>Precio Unitario</label>
+            <input type="number" id="precio" min="1" required>
+
+            <label>Canal de Venta</label>
+            <select id="canalVenta">
+                <option value="Local">Local</option>
+                <option value="Tienda Web">Tienda Web</option>
+                <option value="WhatsApp">WhatsApp</option>
+            </select>
+
+            <button type="button" id="calcularVenta">Calcular Total</button>
+            <button type="submit">Registrar Venta</button>
+        </form>
+
+        <h3 id="resultadoVenta">Total: $0</h3>
+    </section>
+
+    <hr>
+
+    <section>
+        <h2>Registro de Gastos</h2>
+        <form id="gastoForm">
+            <label>Categoría</label>
+            <input type="text" id="categoriaGasto" required>
+
+            <label>Descripción</label>
+            <input type="text" id="descripcionGasto" required>
+
+            <label>Monto</label>
+            <input type="number" id="montoGasto" min="1" required>
+
+            <label>Fecha</label>
+            <input type="date" id="fechaGasto" required>
+
+            <button type="submit">Guardar Gasto</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Últimos Gastos</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Categoría</th>
+                    <th>Descripción</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody id="tablaGastos">
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<footer>
+    <p>NovaShop - Johan Ventresca - Bruno Silva - Mateo Mayero</p>
+</footer>
+
+<script src="app.js"></script>
+
+</body>
+</html>

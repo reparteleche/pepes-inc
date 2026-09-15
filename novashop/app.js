@@ -1,3 +1,4 @@
+//login
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
@@ -8,41 +9,55 @@ if (loginForm) {
 
         const email = document.getElementById("email").value.trim();
         const password = document.getElementById("password").value.trim();
-        const rol = document.getElementById("rol").value;
+        const role = document.getElementById("role").value;
 
         const mensaje = document.getElementById("mensaje");
 
-        if (email === "" || password === "" || rol === "") {
+        if (email === "" || password === "" || role === "") {
 
             mensaje.textContent = "Complete todos los campos.";
             return;
         }
 
-        if (
-            email === "admin@gmail.com" &&
-            password === "1234" &&
-            rol === "Administrador"
-        ) {
+        const loginData = {
+            email: email,
+            password: password,
+            role: role
+        };
 
-            window.location.href = "dashboard.html";
-            return;
-        }
-
-        if (
-            email === "vendedor@gmail.com" &&
-            password === "1234" &&
-            rol === "Vendedor"
-        ) {
-
-            window.location.href = "operaciones.html";
-            return;
-        }
-
-        mensaje.textContent = "Usuario o contraseña incorrectos.";
+        fetch("api/login.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(loginData)
+        })
+        .then(function (response) {
+            if (!response.ok && response.status !== 401 && response.status !== 400) {
+                throw new Error("Server communication fault.");
+            }
+            return response.json();
+        })
+        .then(function (data) {
+            if (data.success) {
+                if (data.role === "Administrador") {
+                    window.location.href = "dashboard.php";
+                } else if (data.role === "Vendedor") {
+                    window.location.href = "operaciones.php";
+                }
+            } else {
+                mensaje.textContent = data.error || "Usuario o contraseña incorrectos.";
+            }
+        })
+        .catch(function (error) {
+            console.error("Fetch network fault:", error);
+            mensaje.textContent = "Error de conexión con el servidor XAMPP.";
+        });
 
     });
 
 }
+
 //in
 const productoForm = document.getElementById("productoForm");
 
@@ -149,7 +164,7 @@ if (productoForm) {
     }
 
 }
-//op ventas
+//op ventas con xampp
 const ventaForm = document.getElementById("ventaForm");
 
 if (ventaForm) {
@@ -157,42 +172,37 @@ if (ventaForm) {
     const selectProducto = document.getElementById("productoVenta");
     const resultadoVenta = document.getElementById("resultadoVenta");
 
-    let productos = JSON.parse(localStorage.getItem("productos")) || [];
-    let ventas = JSON.parse(localStorage.getItem("ventas")) || [];
-
-    //select
     selectProducto.innerHTML = "";
-
-    productos.forEach(function (producto) {
-
-        let opcion = document.createElement("option");
-        opcion.value = producto.nombre;
-        opcion.textContent = producto.nombre;
-
-        selectProducto.appendChild(opcion);
-
+    fetch("api/products.php")
+    .then(function (response) { 
+        return response.json(); 
+    })
+    .then(function (productosBD) {
+        productosBD.forEach(function (producto) {
+            let opcion = document.createElement("option");
+            opcion.value = producto.name;
+            opcion.textContent = producto.name;
+            selectProducto.appendChild(opcion);
+        });
+    })
+    .catch(function (error) { 
+        console.error("Error al cargar productos para venta:", error); 
     });
 
-    //
     document.getElementById("calcularVenta").addEventListener("click", function () {
 
         const cantidad = Number(document.getElementById("cantidad").value);
         const precio = Number(document.getElementById("precio").value);
 
         if (cantidad <= 0 || precio <= 0) {
-
             alert("Ingrese valores válidos.");
             return;
-
         }
 
         const total = cantidad * precio;
-
         resultadoVenta.textContent = "Total: $" + total;
-
     });
 
-    //segir con ventas
     ventaForm.addEventListener("submit", function (e) {
 
         e.preventDefault();
@@ -203,39 +213,44 @@ if (ventaForm) {
         const canal = document.getElementById("canalVenta").value;
 
         if (cantidad <= 0 || precio <= 0) {
-
             alert("Ingrese valores válidos.");
             return;
-
         }
 
-        const total = cantidad * precio;
+        const ventaData = {
+            productName: producto,
+            quantity: cantidad,
+            price: precio,
+            channel: canal
+        };
 
-        ventas.push({
-            producto: producto,
-            cantidad: cantidad,
-            precio: precio,
-            canal: canal,
-            total: total
+        fetch("api/sales.php", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json" 
+            },
+            body: JSON.stringify(ventaData)
+        })
+        .then(function (response) {
+            if (!response.ok) throw new Error("Error en persistencia.");
+            return response.json();
+        })
+        .then(function (data) {
+            alert("Venta registrada correctamente en XAMPP.");
+            ventaForm.reset();
+            resultadoVenta.textContent = "Total: $0";
+        })
+        .catch(function (error) {
+            console.error("Error Fetch POST ventas:", error);
+            alert("Error de conexión con el servidor MySQL.");
         });
-
-        localStorage.setItem("ventas", JSON.stringify(ventas));
-
-        alert("Venta registrada correctamente.");
-
-        ventaForm.reset();
-
-        resultadoVenta.textContent = "Total: $0";
-
     });
-
 }
-//op gastos
+
+// op gastos xampp
 const gastoForm = document.getElementById("gastoForm");
 
 if (gastoForm) {
-
-    let gastos = JSON.parse(localStorage.getItem("gastos")) || [];
 
     mostrarGastos();
 
@@ -249,51 +264,47 @@ if (gastoForm) {
         const fecha = document.getElementById("fechaGasto").value;
 
         if (categoria === "" || descripcion === "" || monto <= 0 || fecha === "") {
-
             alert("Complete todos los campos.");
             return;
-
         }
 
-        gastos.push({
-            categoria: categoria,
-            descripcion: descripcion,
-            monto: monto,
-            fecha: fecha
+        const gastoData = {
+            category: categoria,
+            description: descripcion,
+            amount: monto,
+            date: fecha
+        };
+
+        fetch("api/expenses.php", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json" 
+            },
+            body: JSON.stringify(gastoData)
+        })
+        .then(function (response) {
+            if (!response.ok) throw new Error("Error al guardar gasto.");
+            return response.json();
+        })
+        .then(function (data) {
+            alert("Gasto registrado correctamente en XAMPP.");
+            mostrarGastos();
+            gastoForm.reset();
+        })
+        .catch(function (error) {
+            console.error("Error Fetch POST gastos:", error);
+            alert("Error de conexión al guardar el gasto.");
         });
-
-        localStorage.setItem("gastos", JSON.stringify(gastos));
-
-        mostrarGastos();
-
-        gastoForm.reset();
-
-        alert("Gasto registrado correctamente.");
-
     });
 
     function mostrarGastos() {
-
         const tabla = document.getElementById("tablaGastos");
-
-        tabla.innerHTML = "";
-
-        gastos.forEach(function (gasto) {
-
-            tabla.innerHTML += `
-                <tr>
-                    <td>${gasto.categoria}</td>
-                    <td>${gasto.descripcion}</td>
-                    <td>$${gasto.monto}</td>
-                    <td>${gasto.fecha}</td>
-                </tr>
-            `;
-
-        });
+        if (!tabla) return;
+        
 
     }
-
 }
+
 //repo
 const botonReporte = document.getElementById("generarReporte");
 
@@ -324,117 +335,63 @@ if (botonReporte) {
         totalGastos += gasto.monto;
 
     });
-
-    document.getElementById("totalGastos").textContent =
-        "Total de gastos: $" + totalGastos;
-
+    document.getElementById("totalGastos").textContent = "Total de gastos: $" + totalGastos;
+    
     let stockBajo = 0;
-
+    
     productos.forEach(function (producto) {
-
         if (producto.stock <= 5) {
-
             stockBajo++;
-
         }
-
     });
-
-    document.getElementById("stockBajo").textContent =
-        "Productos con stock bajo: " + stockBajo;
+    
+    document.getElementById("stockBajo").textContent = "Productos con stock bajo: " + stockBajo;
 
     botonReporte.addEventListener("click", function () {
-
         const tipo = document.getElementById("tipoReporte").value;
         const resultado = document.getElementById("resultadoReporte");
-
+        
         resultado.innerHTML = "";
 
         if (tipo === "Inventario") {
-
             productos.forEach(function (producto) {
-
-                resultado.innerHTML +=
-                "<p>" +
-                producto.nombre +
-                " | Stock: " +
-                producto.stock +
-                " | $" +
-                producto.precioVenta +
-                "</p>";
-
+                resultado.innerHTML += `<p>${producto.nombre} | Stock: ${producto.stock} | $${producto.precioVenta}</p>`;
             });
-
         }
 
         if (tipo === "Ventas") {
-
             ventas.forEach(function (venta) {
-
-                resultado.innerHTML +=
-                "<p>" +
-                venta.producto +
-                " | Cantidad: " +
-                venta.cantidad +
-                " | Total: $" +
-                venta.total +
-                "</p>";
-
+                resultado.innerHTML += `<p>${venta.producto} | Cantidad: ${venta.cantidad} | Total: $${venta.total}</p>`;
             });
-
         }
 
         if (tipo === "Gastos") {
-
             gastos.forEach(function (gasto) {
-
-                resultado.innerHTML +=
-                "<p>" +
-                gasto.categoria +
-                " | $" +
-                gasto.monto +
-                " | " +
-                gasto.fecha +
-                "</p>";
-
+                resultado.innerHTML += `<p>${gasto.categoria} | $${gasto.monto} | ${gasto.fecha}</p>`;
             });
-
         }
-
     });
-
 }
-//menu
+
+//dashboard y el login 
 const dashboardProductos = document.getElementById("dashboardProductos");
 
 if (dashboardProductos) {
-
     let productos = JSON.parse(localStorage.getItem("productos")) || [];
     let ventas = JSON.parse(localStorage.getItem("ventas")) || [];
     let gastos = JSON.parse(localStorage.getItem("gastos")) || [];
 
-    document.getElementById("dashboardProductos").textContent =
-        productos.length + " registrados";
-
-    document.getElementById("dashboardVentas").textContent =
-        ventas.length + " realizadas";
-
-    document.getElementById("dashboardGastos").textContent =
-        gastos.length + " registrados";
+    document.getElementById("dashboardProductos").textContent = productos.length + " registrados";
+    document.getElementById("dashboardVentas").textContent = ventas.length + " realizadas";
+    document.getElementById("dashboardGastos").textContent = gastos.length + " registrados";
 
     let alertas = 0;
-
+    
     productos.forEach(function (producto) {
-
         if (producto.stock <= 5) {
-
             alertas++;
-
         }
-
     });
 
-    document.getElementById("dashboardAlertas").textContent =
-        alertas + " pendientes";
-
+    document.getElementById("dashboardAlertas").textContent = alertas + " pendientes";
 }

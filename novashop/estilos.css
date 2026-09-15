@@ -38,8 +38,14 @@ section{
     border-radius: 5px;
 }
 
-h1,h2,h3{
-    color: #fafdff;
+header h1, header h2, header h3, header p {
+    color: #ffffff !important;
+}
+
+main h1, main h2, main h3,
+section h1, section h2, section h3,
+.card h3, h1, h2, h3 {
+    color: #1f4e79;
 }
 
 input, select{
