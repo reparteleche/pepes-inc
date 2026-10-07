@@ -1,1 +1,1 @@
-# Sistemas de Stock para tienda NovaShop de NexoCore por Johan Ventresca
+# Segunda entrega de Programacion NexoCore = Proyecto StockFlow NovaFlow
