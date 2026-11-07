@@ -1,8 +1,10 @@
 <?php require_once "config/auth_check.php"; checkAccess("Administrador"); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - NovaShop</title>
     <link rel="stylesheet" href="estilos.css?v=3.0">
 </head>
@@ -15,9 +17,9 @@
 
 <nav>
     <a href="dashboard.php">Dashboard</a>
-    <a href="inventario.php">Inventario</a>
+    <a href="inventario.html">Inventario</a>
     <a href="operaciones.php">Operaciones</a>
-    <a href="reportes.php">Reportes</a>
+    <a href="reportes.html">Reportes</a>
 </nav>
 
 <main>
@@ -57,7 +59,7 @@
     <p>NovaShop 2026 - Johan Ventresca - Bruno Silva - Mateo Mayero</p>
 </footer>
 
-<script src="app.js"></script>
+<script src="app.js?v=2.0"></script>
 
 </body>
 </html>

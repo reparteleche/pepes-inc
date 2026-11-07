@@ -1,12 +1,24 @@
 <?php
 
-require_once __DIR__ . "/../config/Database.php";
+require_once __DIR__ . "/../config/database.php";
 
 class Expense {
     private $db;
 
     public function __construct() {
         $this->db = Database::getInstance()->getConnection();
+    }
+
+    public function getAll() {
+        try {
+            $sql = "SELECT category, description, amount, date FROM expenses ORDER BY date DESC";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            error_log("Error in getAll expenses: " . $e->getMessage());
+            return [];
+        }
     }
 
     public function create($category, $description, $amount, $date) {

@@ -1,10 +1,13 @@
+<?php require_once "config/auth_check.php"; checkAccess(["Administrador", "Vendedor"]); ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reportes - NovaShop</title>
     <link rel="stylesheet" href="estilos.css?v=5.0">
-    <script src="app.js" defer></script>
+    <script src="app.js?v=2.0" defer></script>
 </head>
 <body>
 
@@ -17,7 +20,7 @@
     <a href="dashboard.php">Dashboard</a>
     <a href="inventario.html">Inventario</a>
     <a href="operaciones.php">Operaciones</a>
-    <a href="Reportes.html">Reportes</a>
+    <a href="reportes.html">Reportes</a>
 </nav>
 
 <main>
